@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Desai Family Tree | દેસાઈ કુટુંબ વૃક્ષ</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌳</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Source+Sans+3:wght@400;500;600;700&family=Noto+Sans+Gujarati:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'Source Sans 3','Segoe UI',sans-serif;background:#FBF7F1;color:#3D3227}
+button{font-family:inherit;cursor:pointer}
+.gu *{font-family:'Noto Sans Gujarati','Source Sans 3',sans-serif!important}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const {useState,useEffect,useMemo,useRef,useCallback}=React;
+
+const DATA=[
+  {id:"chimanlal",name:"Chimanlal Desai",gender:"male",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:null,spouseId:"champaben",nickname:""},
+  {id:"champaben",name:"Champaben Desai",gender:"female",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:null,spouseId:"chimanlal",nickname:""},
+  {id:"jayantilal",name:"Jayantilal C Desai",gender:"male",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:"chimanlal",spouseId:"manjulaben",nickname:""},
+  {id:"manjulaben",name:"Manjulaben J Desai",gender:"female",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:null,spouseId:"jayantilal",nickname:""},
+  {id:"jahwantlal",name:"Jahwantlal C Desai",gender:"male",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:"chimanlal",spouseId:"tarlaben",nickname:""},
+  {id:"tarlaben",name:"Tarlaben J Desai",gender:"female",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:null,spouseId:"jahwantlal",nickname:""},
+  {id:"ramesh",name:"Rameshbhai C Desai",gender:"male",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:"chimanlal",spouseId:"aruna",nickname:""},
+  {id:"aruna",name:"Arunaben R Desai",gender:"female",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:null,spouseId:"ramesh",nickname:""},
+  {id:"niranjan",name:"Niranjanbhai C Desai",gender:"male",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:"chimanlal",spouseId:"shobhana",nickname:""},
+  {id:"shobhana",name:"Shobhanaben N Desai",gender:"female",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:null,spouseId:"niranjan",nickname:""},
+  {id:"ashwin",name:"Ashwinbhai C Desai",gender:"male",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:"chimanlal",spouseId:"neeta",nickname:""},
+  {id:"neeta",name:"Neetaben A Desai",gender:"female",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:null,spouseId:"ashwin",nickname:""},
+  {id:"harshad",name:"Harshadbhai C Desai",gender:"male",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:"chimanlal",spouseId:"maya",nickname:""},
+  {id:"maya",name:"Mayaben H Desai",gender:"female",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:null,spouseId:"harshad",nickname:""},
+  {id:"dilip",name:"Dilipbhai C Desai",gender:"male",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:"chimanlal",spouseId:null,nickname:""},
+  {id:"indira",name:"Indiraben Vinodkumar Shah",gender:"female",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:"chimanlal",spouseId:"vinod",nickname:""},
+  {id:"vinod",name:"Vinodkumar Shah",gender:"male",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:null,spouseId:"indira",nickname:""},
+  {id:"usha",name:"Ushaben Jayendrakumar Desai",gender:"female",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:"chimanlal",spouseId:"jayendra",nickname:""},
+  {id:"jayendra",name:"Jayendrakumar Desai",gender:"male",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:null,spouseId:"usha",nickname:""},
+  {id:"pratima",name:"Pratimaben Niranjankumar Desai",gender:"female",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:"chimanlal",spouseId:"niranjandesai",nickname:""},
+  {id:"niranjandesai",name:"Niranjan Desai",gender:"male",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:null,spouseId:"pratima",nickname:""},
+  {id:"sunil",name:"Sunilbhai J Desai",gender:"male",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:"jayantilal",spouseId:"jagruti",nickname:""},
+  {id:"jagruti",name:"Jagruti S Desai",gender:"female",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:null,spouseId:"sunil",nickname:""},
+  {id:"akshay",name:"Akshay J Desai",gender:"male",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:"jayantilal",spouseId:"sangeeta",nickname:""},
+  {id:"sangeeta",name:"Sangeeta A Desai",gender:"female",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:null,spouseId:"akshay",nickname:""},
+  {id:"parthiv",name:"Parthiv S Desai",gender:"male",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:"sunil",spouseId:null,nickname:""},
+  {id:"khusali",name:"Khusali A Shah",gender:"female",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:"akshay",spouseId:"arpan",nickname:""},
+  {id:"arpan",name:"Arpan Shah",gender:"male",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:null,spouseId:"khusali",nickname:""},
+  {id:"hiteshi",name:"Hiteshi A Desai",gender:"female",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:"akshay",spouseId:null,nickname:""},
+  {id:"nikhil",name:"Nikhil J Desai",gender:"male",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:"jahwantlal",spouseId:"vibhuti",nickname:""},
+  {id:"vibhuti",name:"Vibhuti N Desai",gender:"female",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:null,spouseId:"nikhil",nickname:""},
+  {id:"muniben",name:"Muniben J Desai",gender:"female",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:"jahwantlal",spouseId:null,nickname:""},
+  {id:"shina",name:"Shina R Modi",gender:"female",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:"nikhil",spouseId:"rushin",nickname:""},
+  {id:"rushin",name:"Rushin Modi",gender:"male",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:null,spouseId:"shina",nickname:""},
+  {id:"purvansh",name:"Purvansh R Modi",gender:"male",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:"shina",spouseId:null,nickname:""},
+  {id:"gopi",name:"Gopi Bipinkumar Patel",gender:"female",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:"ramesh",spouseId:"bipin",nickname:""},
+  {id:"bipin",name:"Bipinkumar Patel",gender:"male",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:null,spouseId:"gopi",nickname:""},
+  {id:"trupti",name:"Trupti J Chokshi",gender:"female",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:"ramesh",spouseId:"jignesh_chokshi",nickname:""},
+  {id:"jignesh_chokshi",name:"Jignesh Chokshi",gender:"male",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:null,spouseId:"trupti",nickname:""},
+  {id:"sejal",name:"Sejal A Shah",gender:"female",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:"ramesh",spouseId:"ajay",nickname:""},
+  {id:"ajay",name:"Ajaykumar Shah",gender:"male",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:null,spouseId:"sejal",nickname:""},
+  {id:"pinal",name:"Pinal Ketulkumar Shah",gender:"female",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:"ramesh",spouseId:"ketul",nickname:""},
+  {id:"ketul",name:"Ketulkumar Shah",gender:"male",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:null,spouseId:"pinal",nickname:""},
+  {id:"darshita",name:"Darshita X Patel",gender:"female",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:"gopi",spouseId:"x_patel1",nickname:""},
+  {id:"x_patel1",name:"X Patel",gender:"male",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:null,spouseId:"darshita",nickname:""},
+  {id:"harshil",name:"Harshil B Patel",gender:"male",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:"gopi",spouseId:"x_harshil",nickname:""},
+  {id:"x_harshil",name:"X Harshil Patel",gender:"female",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:null,spouseId:"harshil",nickname:""},
+  {id:"alay",name:"Alay J Chokshi",gender:"male",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:"trupti",spouseId:null,nickname:""},
+  {id:"avi",name:"Avi J Desai",gender:"male",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:"trupti",spouseId:null,nickname:""},
+  {id:"zeel",name:"Zeel A Shah",gender:"female",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:"sejal",spouseId:null,nickname:""},
+  {id:"niket",name:"Niket K Shah",gender:"male",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:"pinal",spouseId:null,nickname:""},
+  {id:"saket",name:"Saket K Shah",gender:"male",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:"pinal",spouseId:null,nickname:""},
+  {id:"sonal",name:"Sonal N Shah",gender:"female",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:"niranjan",spouseId:"nilesh",nickname:""},
+  {id:"nilesh",name:"Nileshkumar Shah",gender:"male",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:null,spouseId:"sonal",nickname:""},
+  {id:"mitul",name:"Mitul N Desai",gender:"male",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:"niranjan",spouseId:"madhvi",nickname:""},
+  {id:"madhvi",name:"Madhvi M Desai",gender:"female",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:null,spouseId:"mitul",nickname:""},
+  {id:"gopal",name:"Gopal N Desai",gender:"male",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:"niranjan",spouseId:null,nickname:""},
+  {id:"sariya",name:"Sariya N Shah",gender:"female",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:"sonal",spouseId:null,nickname:""},
+  {id:"shlok",name:"Shlok N Shah",gender:"male",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:"sonal",spouseId:null,nickname:""},
+  {id:"rutvi",name:"Rutvi M Desai",gender:"female",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:"mitul",spouseId:null,nickname:""},
+  {id:"riyan",name:"Riyan M Desai",gender:"male",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:"mitul",spouseId:null,nickname:""},
+  {id:"sujal",name:"Sujal A Desai",gender:"male",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:"ashwin",spouseId:"shreya",nickname:""},
+  {id:"shreya",name:"Shreya S Desai",gender:"female",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:null,spouseId:"sujal",nickname:""},
+  {id:"pintu",name:"Pintu A Desai",gender:"male",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:"ashwin",spouseId:"zarna",nickname:""},
+  {id:"zarna",name:"Zarna P Desai",gender:"female",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:null,spouseId:"pintu",nickname:""},
+  {id:"ashray",name:"Ashray S Desai",gender:"male",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:"sujal",spouseId:null,nickname:""},
+  {id:"brinda",name:"Brinda P Desai",gender:"female",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:"pintu",spouseId:null,nickname:""},
+  {id:"chaki",name:"Chaki Jigneshkumar Shah",gender:"female",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:"harshad",spouseId:"jignesh_shah",nickname:""},
+  {id:"jignesh_shah",name:"Jigneshkumar Shah",gender:"male",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:null,spouseId:"chaki",nickname:""},
+  {id:"kajal",name:"Kajal A Shah",gender:"female",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:"harshad",spouseId:"atit",nickname:""},
+  {id:"atit",name:"Atitkumar Shah",gender:"male",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:null,spouseId:"kajal",nickname:""},
+  {id:"yahvi",name:"Yahvi J Shah",gender:"female",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:"chaki",spouseId:null,nickname:""},
+  {id:"yashvi",name:"Yashvi J Shah",gender:"female",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:"chaki",spouseId:null,nickname:""},
+  {id:"radha",name:"Radha Atitkumar Shah",gender:"female",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:"kajal",spouseId:null,nickname:""},
+  {id:"kartik",name:"Kartik V Shah",gender:"male",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:"indira",spouseId:"bijal",nickname:""},
+  {id:"bijal",name:"Bijal K Shah",gender:"female",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:null,spouseId:"kartik",nickname:""},
+  {id:"rakesh",name:"Rakesh V Shah",gender:"male",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:"indira",spouseId:"janki",nickname:""},
+  {id:"janki",name:"Janki R Shah",gender:"female",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:null,spouseId:"rakesh",nickname:""},
+  {id:"nilima",name:"Nilima Dilipkumar Shah",gender:"female",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:"indira",spouseId:"dilipkumar",nickname:""},
+  {id:"dilipkumar",name:"Dilipkumar Shah",gender:"male",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:null,spouseId:"nilima",nickname:""},
+  {id:"pinky",name:"Pinky Ambarkumar Modi",gender:"female",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:"indira",spouseId:"ambar",nickname:""},
+  {id:"ambar",name:"Ambarkumar Modi",gender:"male",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:null,spouseId:"pinky",nickname:""},
+  {id:"drashati",name:"Drashati Het Shah",gender:"female",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:"kartik",spouseId:"het",nickname:""},
+  {id:"het",name:"Het Shah",gender:"male",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:null,spouseId:"drashati",nickname:""},
+  {id:"chintu",name:"Chintu D Shah",gender:"male",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:"nilima",spouseId:null,nickname:""},
+  {id:"dolly",name:"Dolly X Sarap",gender:"female",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:"nilima",spouseId:"x_sarap",nickname:""},
+  {id:"x_sarap",name:"X Sarap",gender:"male",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:null,spouseId:"dolly",nickname:""},
+  {id:"x_ambar",name:"X Ambarkumar Modi",gender:"male",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:"pinky",spouseId:null,nickname:""},
+  {id:"nanu",name:"Nanu Ambarkumar Modi",gender:"male",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:"pinky",spouseId:null,nickname:""},
+  {id:"ashish",name:"Ashish J Desai",gender:"male",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:"usha",spouseId:"swetal",nickname:""},
+  {id:"swetal",name:"Swetal A Desai",gender:"female",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:null,spouseId:"ashish",nickname:""},
+  {id:"saumil",name:"Saumil J Desai",gender:"male",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:"usha",spouseId:"saimy",nickname:""},
+  {id:"saimy",name:"Saimy S Desai",gender:"female",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:null,spouseId:"saumil",nickname:""},
+  {id:"vishesh",name:"Vishesh A Desai",gender:"male",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:"ashish",spouseId:null,nickname:""},
+  {id:"hirvi",name:"Hirvi S Desai",gender:"female",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:"saumil",spouseId:null,nickname:""},
+  {id:"x_saumil",name:"X S Desai",gender:"male",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:"saumil",spouseId:null,nickname:""},
+  {id:"sneha",name:"Sneha Vinaykumar Ghosh",gender:"female",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:"pratima",spouseId:"vinay",nickname:""},
+  {id:"vinay",name:"Vinaykumar Ghosh",gender:"male",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:null,spouseId:"sneha",nickname:""},
+  {id:"megha",name:"Megha X Patel",gender:"female",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:"pratima",spouseId:"x_megha",nickname:""},
+  {id:"x_megha",name:"X Patel",gender:"male",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:null,spouseId:"megha",nickname:""},
+  {id:"x_sneha",name:"X Vinaykumar Ghosh",gender:"male",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:"sneha",spouseId:null,nickname:""},
+  {id:"x_meghachild",name:"X X Patel",gender:"male",birthYear:"",deathYear:"",relation:"",notes:"",photo:null,parentId:"megha",spouseId:null,nickname:""},];
+
+function calcRelation(meId,targetId,pm){
+  if(!meId||!targetId||!pm[meId]||!pm[targetId])return"";
+  if(meId===targetId)return"Me / હું";
+  const m=pm[targetId].gender==="male",iAmMale=pm[meId].gender==="male";
+  function chain(id){const c=[];let cur=id;const v=new Set();while(cur&&pm[cur]&&!v.has(cur)){v.add(cur);c.push(cur);cur=pm[cur].parentId;}return c;}
+  function fb(a,b){const ac=chain(a),bc=chain(b),aS={};ac.forEach((id,i)=>aS[id]=i);for(let i=0;i<bc.length;i++){if(aS[bc[i]]!==undefined)return{up:aS[bc[i]],down:i,aPath:ac.slice(0,aS[bc[i]]+1),bPath:bc.slice(0,i+1)};}return null;}
+  function bL(up,dn,aP,bP){
+    if(up===1&&dn===0)return m?"Father / પિતા":"Mother / માતા";
+    if(up===0&&dn===1)return m?"Son / દીકરો":"Daughter / દીકરી";
+    if(up===2&&dn===0){const pg=pm[aP[1]]?.gender;return pg==="male"?(m?"Grandfather / દાદા":"Grandmother / દાદી"):(m?"Grandfather / નાના":"Grandmother / નાની");}
+    if(up===0&&dn===2)return m?"Grandson / પૌત્ર":"Granddaughter / પૌત્રી";
+    if(up===3&&dn===0)return m?"Great Grandfather / વડદાદા":"Great Grandmother / વડદાદી";
+    if(up===0&&dn===3)return m?"Great Grandson / પ્રપૌત્ર":"Great Granddaughter / પ્રપૌત્રી";
+    if(up===1&&dn===1)return m?"Brother / ભાઈ":"Sister / બહેન";
+    if(up===2&&dn===1){const pg=pm[aP[1]]?.gender;return pg==="male"?(m?"Uncle / કાકા":"Aunt / ફોઈ"):(m?"Uncle / મામા":"Aunt / માસી");}
+    if(up===1&&dn===2){const sg=pm[bP[1]]?.gender;return sg==="male"?(m?"Nephew / ભત્રીજો":"Niece / ભત્રીજી"):(m?"Nephew / ભાણેજ":"Niece / ભાણી");}
+    if(up===2&&dn===2){const pg=pm[aP[1]]?.gender;return pg==="male"?(m?"Cousin / પિતરાઈ ભાઈ":"Cousin / પિતરાઈ બહેન"):(m?"Cousin / મામેરો ભાઈ":"Cousin / મામેરી બહેન");}
+    if(up===3&&dn===1)return m?"Grand Uncle / મોટા દાદા":"Grand Aunt / મોટી દાદી";
+    if(up===3&&dn===2){const pg=pm[aP[1]]?.gender;return pg==="male"?(m?"Father's Cousin / કાકા":"Father's Cousin / ફોઈ"):(m?"Mother's Cousin / મામા":"Mother's Cousin / માસી");}
+    if(up===3&&dn===3)return m?"Second Cousin / દૂરના ભાઈ":"Second Cousin / દૂરની બહેન";
+    if(up===1&&dn===3)return m?"Grand Nephew / ભત્રીજાનો દીકરો":"Grand Niece / ભત્રીજાની દીકરી";
+    if(up===2&&dn===3)return m?"Cousin's Son / પિતરાઈનો દીકરો":"Cousin's Daughter / પિતરાઈની દીકરી";
+    if(up===4&&dn===2)return m?"Grandfather's Cousin / દાદા":"Grandmother's Cousin / દાદી";
+    if(up===4&&dn===3)return m?"Father's Second Cousin / કાકા":"Father's Second Cousin / ફોઈ";
+    if(up===4&&dn===4)return m?"Third Cousin / દૂરના ભાઈ":"Third Cousin / દૂરની બહેન";
+    return m?"Relative / સગો":"Relative / સગી";
+  }
+  function sL(up,dn,aP,rg){
+    if(up===1&&dn===0)return m?"Father / પિતા":"Mother / માતા";
+    if(up===2&&dn===0){const pg=pm[aP[1]]?.gender;return pg==="male"?(m?"Grandfather / દાદા":"Grandmother / દાદી"):(m?"Grandfather / નાના":"Grandmother / નાની");}
+    if(up===3&&dn===0)return m?"Great Grandfather / વડદાદા":"Great Grandmother / વડદાદી";
+    if(up===1&&dn===1)return m?"Brother-in-law / બનેવી":"Sister-in-law / ભાભી";
+    if(up===2&&dn===1){const pg=pm[aP[1]]?.gender;if(pg==="male")return m?"Uncle / ફુઆ":"Aunt / કાકી";return m?"Uncle / માસા":"Aunt / મામી";}
+    if(up===3&&dn===1)return m?"Grand Uncle / મોટા દાદા":"Grand Aunt / મોટી દાદી";
+    if(up===3&&dn===2){const pg=pm[aP[1]]?.gender;return pg==="male"?(m?"Father's Cousin's Spouse / ફુઆ":"Father's Cousin's Spouse / કાકી"):(m?"Mother's Cousin's Spouse / માસા":"Mother's Cousin's Spouse / મામી");}
+    if(up===0&&dn===1)return m?"Son-in-law / જમાઈ":"Daughter-in-law / વહુ";
+    if(up===0&&dn===2)return m?"Grandson-in-law / પૌત્ર જમાઈ":"Granddaughter-in-law / પૌત્રવધૂ";
+    if(up===1&&dn===2)return m?"Nephew-in-law / ભત્રીજા જમાઈ":"Niece-in-law / ભત્રીજી વહુ";
+    if(up===2&&dn===2)return m?"Cousin-in-law / પિતરાઈ":"Cousin-in-law / પિતરાઈ";
+    if(up===2&&dn===3)return m?"Cousin's Son-in-law / જમાઈ":"Cousin's Daughter-in-law / વહુ";
+    if(up===4&&dn===2)return m?"Grandfather's Cousin's Spouse / દાદા":"Grandmother's Cousin's Spouse / દાદી";
+    if(up===4&&dn===3)return m?"Relative / ફુઆ":"Relative / કાકી";
+    return m?"Relative / સગો":"Relative / સગી";
+  }
+  if(pm[meId].spouseId===targetId)return m?"Husband / પતિ":"Wife / પત્ની";
+  let spOf=null;
+  for(const p of Object.values(pm)){
+    if((p.spouseId===targetId||pm[targetId].spouseId===p.id)&&p.id!==targetId){
+      const r=fb(meId,p.id);if(r){spOf={...r,rid:p.id};break;}
+    }
+  }
+  const blood=fb(meId,targetId);
+  if(spOf)return sL(spOf.up,spOf.down,spOf.aPath,pm[spOf.rid]?.gender);
+  if(blood)return bL(blood.up,blood.down,blood.aPath,blood.bPath);
+  if(pm[meId].spouseId){
+    const sp=pm[meId].spouseId,r=fb(sp,targetId);
+    if(r){const{up,down}=r;
+      if(up===1&&down===0)return m?"Father-in-law / સસરા":"Mother-in-law / સાસુ";
+      if(up===0&&down===1)return m?"Son / દીકરો":"Daughter / દીકરી";
+      if(up===0&&down===2)return m?"Grandson / પૌત્ર":"Granddaughter / પૌત્રી";
+      if(up===2&&down===0)return m?"Grandfather-in-law / દાદા સસરા":"Grandmother-in-law / દાદી સાસુ";
+      if(up===3&&down===0)return m?"Great Grandfather-in-law / વડદાદા":"Great Grandmother-in-law / વડદાદી";
+      if(up===1&&down===1){if(iAmMale)return m?"Brother-in-law / સાળો":"Sister-in-law / સાળી";return m?"Brother-in-law / દિયર":"Sister-in-law / નણંદ";}
+      if(up===2&&down===1)return m?"Spouse's Uncle / સસરાના ભાઈ":"Spouse's Aunt / સસરાની બહેન";
+      if(up===1&&down===2)return m?"Nephew / ભત્રીજો":"Niece / ભત્રીજી";
+      if(up===2&&down===2)return m?"Spouse's Cousin / સગો":"Spouse's Cousin / સગી";
+      return m?"In-law / સગો":"In-law / સગી";
+    }
+    for(const p of Object.values(pm)){
+      if((p.spouseId===targetId||pm[targetId].spouseId===p.id)&&p.id!==targetId){
+        const r2=fb(sp,p.id);
+        if(r2){const{up,down}=r2;
+          if(up===1&&down===0)return m?"Father-in-law / સસરા":"Mother-in-law / સાસુ";
+          if(up===1&&down===1){if(iAmMale)return m?"Co-brother / વેવાઈ":"Co-sister / વેવાણ";return m?"Brother-in-law / જેઠ":"Sister-in-law / જેઠાણી";}
+          if(up===0&&down===1)return m?"Son-in-law / જમાઈ":"Daughter-in-law / વહુ";
+          return m?"In-law / સગો":"In-law / સગી";
+        }
+      }
+    }
+  }
+  return"Family / પરિવાર";
+}
+
+const byB=(a,b)=>(parseInt(a.birthYear)||99999)-(parseInt(b.birthYear)||99999);
+function buildTree(people){
+  const m={};people.forEach(p=>m[p.id]=p);
+  const kbp={};people.forEach(p=>{if(p.parentId){if(!kbp[p.parentId])kbp[p.parentId]=[];kbp[p.parentId].push(p);}});
+  function gk(pid,sid){const s=new Set(),o=[];[pid,sid].forEach(id=>{if(!id)return;(kbp[id]||[]).forEach(c=>{if(!s.has(c.id)){s.add(c.id);o.push(c);}});});return o.sort(byB);}
+  const done=new Set();
+  function build(id){if(done.has(id))return null;const p=m[id];if(!p)return null;done.add(id);const sid=p.spouseId&&m[p.spouseId]&&!done.has(p.spouseId)?p.spouseId:null;if(sid)done.add(sid);return{primary:p,spouse:sid?m[sid]:null,children:gk(id,sid).map(k=>build(k.id)).filter(Boolean)};}
+  const noP=people.filter(p=>!p.parentId).sort(byB),skip=new Set(),rIds=[];
+  noP.forEach(p=>{if(skip.has(p.id))return;if(p.spouseId&&m[p.spouseId]&&!m[p.spouseId].parentId){const pk=(kbp[p.id]||[]).length,sk=(kbp[p.spouseId]||[]).length;if(pk>=sk){rIds.push(p.id);skip.add(p.spouseId);}else{rIds.push(p.spouseId);skip.add(p.id);}}else rIds.push(p.id);});
+  return rIds.map(id=>build(id)).filter(Boolean);
+}
+
+const TX={
+  en:{title:"Desai Family Tree",everyone:"📋 Everyone",list:"🌳 Tree List",tree:"🌲 Visual Tree",search:"🔍 Search by name...",iAm:"I am...",who:"👤 Who are you?",whoHint:"Select yourself to see how everyone is related to you.",viewAs:"Viewing as",change:"Tap to change",lang:"ગુજ",members:"members",conn:"Family Connections",back:"← Back",fit:"Fit",zoom:"Pinch/scroll to zoom · Drag to move",noRes:"No one found for",born:"Born"},
+  gu:{title:"દેસાઈ કુટુંબ વૃક્ષ",everyone:"📋 બધા સભ્યો",list:"🌳 યાદી",tree:"🌲 વૃક્ષ ચિત્ર",search:"🔍 નામથી શોધો...",iAm:"હું છું...",who:"👤 તમે કોણ છો?",whoHint:"તમારું નામ પસંદ કરો — બધાના સંબંધ દેખાશે.",viewAs:"તરીકે જુઓ",change:"બદલવા દબાવો",lang:"EN",members:"સભ્યો",conn:"પારિવારિક સંબંધો",back:"← પાછા",fit:"ફિટ",zoom:"ઝૂમ: સ્ક્રોલ · ખસેડો: ખેંચો",noRes:"કોઈ મળ્યું નથી:",born:"જન્મ"},
+};
+
+const C={bg:"#FBF7F1",w:"#FFFFFF",warm:"#F5EDE3",brd:"#E8DFD3",acc:"#8B6F4E",accL:"#A68B6B",accBg:"#F0E8DD",txt:"#3D3227",txtM:"#6B5D4F",txtL:"#9A8D7F",male:"#5B89A6",maleBg:"#EBF2F7",fem:"#B56B7A",femBg:"#F9EDF0",shd:"rgba(60,45,30,.08)",shdD:"rgba(60,45,30,.14)",line:"#B0A696",nodeBg:"#FFFDF9",spL:"#D4956A",meH:"#E6D4F0",meB:"#9B72B0"};
+const gc=g=>g==="female"?C.fem:C.male;
+const gbg=g=>g==="female"?C.femBg:C.maleBg;
+
+function Av({n,g,s,mini}){
+  const i=(n||"?").split(" ").filter(Boolean).map(w=>w[0]).join("").slice(0,2).toUpperCase();
+  return <div style={{width:s,height:s,borderRadius:"50%",background:gbg(g),border:`${mini?2:3}px solid ${gc(g)}`,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,margin:s>100?"0 auto":0}}><span style={{fontSize:s*(mini?.3:.32),fontWeight:700,color:gc(g),opacity:.65}}>{i}</span></div>;
+}
+
+function PRow({p,onClick,r,me}){
+  return <button onClick={onClick} style={{display:"flex",alignItems:"center",gap:12,width:"100%",padding:"12px 14px",background:me?C.meH:C.w,border:`1.5px solid ${me?C.meB:C.brd}`,borderRadius:14,cursor:"pointer",textAlign:"left",boxShadow:`0 2px 6px ${C.shd}`,marginBottom:8}}>
+    <Av n={p.name} g={p.gender} s={54}/>
+    <div style={{flex:1,minWidth:0}}>
+      <div style={{fontSize:16,fontWeight:600,color:C.txt,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{p.name}{me?" 👤":""}</div>
+      {r&&<div style={{fontSize:13,color:me?C.meB:C.accL,fontWeight:me?600:400,marginTop:2}}>{r}</div>}
+    </div>
+    <span style={{fontSize:20,color:C.txtL}}>›</span>
+  </button>;
+}
+
+function RRow({p,onClick,r}){
+  return <button onClick={onClick} style={{display:"flex",alignItems:"center",gap:10,width:"100%",padding:"12px 16px",background:C.w,border:"none",borderBottom:`1px solid ${C.brd}`,cursor:"pointer"}}>
+    <Av n={p.name} g={p.gender} s={42}/>
+    <div style={{flex:1,textAlign:"left"}}><div style={{fontSize:16,fontWeight:600,color:C.txt}}>{p.name}</div>{r&&<div style={{fontSize:13,color:C.accL}}>{r}</div>}</div>
+    <span style={{fontSize:18,color:C.txtL}}>›</span>
+  </button>;
+}
+
+function TN({node,openP,d,rel,meId}){
+  const r1=rel(node.primary.id),r2=node.spouse?rel(node.spouse.id):"";
+  const me=node.primary.id===meId||node.spouse?.id===meId;
+  return <div style={{marginLeft:d>0?18:0,borderLeft:d>0?`2.5px solid ${C.brd}`:"none",paddingLeft:d>0?12:0,marginTop:d>0?3:6}}>
+    <button onClick={()=>openP(node.primary.id)} style={{display:"flex",alignItems:"center",gap:10,width:"100%",padding:"10px 12px",margin:"2px 0",background:me?C.meH:C.w,border:`1.5px solid ${me?C.meB:C.brd}`,borderRadius:12,cursor:"pointer"}}>
+      <Av n={node.primary.name} g={node.primary.gender} s={38}/>
+      <div style={{flex:1,textAlign:"left"}}>
+        {node.spouse?<>
+          <div style={{fontSize:14,fontWeight:600,lineHeight:1.4}}>{node.primary.name} {r1&&<span style={{fontSize:11,fontWeight:500,color:me?C.meB:C.accL}}>({r1})</span>}</div>
+          <div style={{fontSize:14,fontWeight:600,lineHeight:1.4}}>& {node.spouse.name} {r2&&<span style={{fontSize:11,fontWeight:500,color:me?C.meB:C.accL}}>({r2})</span>}{me?" 👤":""}</div>
+        </>:<>
+          <div style={{fontSize:15,fontWeight:600}}>{node.primary.name}{me?" 👤":""}</div>
+          {r1&&<div style={{fontSize:12,color:me?C.meB:C.txtL}}>{r1}</div>}
+        </>}
+      </div>
+      <span style={{color:C.txtL,fontSize:16}}>›</span>
+    </button>
+    {node.children.map((c,i)=><TN key={i} node={c} openP={openP} d={d+1} rel={rel} meId={meId}/>)}
+  </div>;
+}
+
+function App(){
+  const [lang,setLang]=useState(()=>{try{return localStorage.getItem("ft-lang")||"en"}catch{return"en"}});
+  const [meId,setMeId]=useState(()=>{try{return localStorage.getItem("ft-me")||""}catch{return""}});
+  const [view,setView]=useState("home");
+  const [mode,setMode]=useState("grid");
+  const [selId,setSelId]=useState(null);
+  const [search,setSearch]=useState("");
+  const [mePicker,setMePicker]=useState(false);
+  const [meSearch,setMeSearch]=useState("");
+  const [zoom,setZoom]=useState(.5);
+  const [pan,setPan]=useState({x:20,y:20});
+  const [drag,setDrag]=useState(false);
+  const [ds,setDs]=useState({x:0,y:0});
+  const cr=useRef(null),tr=useRef(null),pr=useRef(null);
+  const t=TX[lang];
+
+  useEffect(()=>{try{localStorage.setItem("ft-lang",lang)}catch{}},[lang]);
+  useEffect(()=>{if(meId)try{localStorage.setItem("ft-me",meId)}catch{}},[meId]);
+  useEffect(()=>{if(!meId)setMePicker(true)},[]);
+
+  const pm=useMemo(()=>{const m={};DATA.forEach(p=>m[p.id]=p);return m},[]);
+  const trees=useMemo(()=>buildTree(DATA),[]);
+  const relRaw=useCallback(id=>meId&&pm[meId]?calcRelation(meId,id,pm):"",[meId,pm]);
+  const rel=useCallback(id=>{const r=relRaw(id);if(!r)return"";const p=r.split(" / ");return lang==="gu"?(p[1]||p[0]):p[0]},[relRaw,lang]);
+  const ck=useCallback(id=>{const p=pm[id];if(!p)return[];const ids=new Set([id]);if(p.spouseId&&pm[p.spouseId])ids.add(p.spouseId);const s=new Set();return DATA.filter(c=>c.parentId&&ids.has(c.parentId)&&!s.has(c.id)&&(s.add(c.id),true)).sort(byB)},[pm]);
+  const sel=selId?pm[selId]:null;
+  const openP=id=>{setSelId(id);setView("person")};
+
+  const filtered=useMemo(()=>{if(!search.trim())return DATA;const s=search.toLowerCase();return DATA.filter(p=>p.name.toLowerCase().includes(s))},[search]);
+  const sorted=useMemo(()=>{const d={};const gd=(id,v=new Set())=>{if(d[id]!==undefined)return d[id];if(v.has(id))return 0;v.add(id);const p=pm[id];if(!p?.parentId||!pm[p.parentId]){d[id]=0;return 0}d[id]=gd(p.parentId,v)+1;return d[id]};DATA.forEach(p=>gd(p.id));return[...filtered].sort((a,b)=>(d[a.id]||0)-(d[b.id]||0)||a.name.localeCompare(b.name))},[filtered,pm]);
+  const meCands=useMemo(()=>{if(!meSearch.trim())return[...DATA].sort((a,b)=>a.name.localeCompare(b.name));const s=meSearch.toLowerCase();return DATA.filter(p=>p.name.toLowerCase().includes(s)).sort((a,b)=>a.name.localeCompare(b.name))},[meSearch]);
+
+  const NW=110,NH=80,HG=16,VG=48,CG=10;
+  const L=useMemo(()=>{const pos={},lines=[],sL=[];const cw=n=>n.spouse?NW*2+CG:NW;
+    function ms(n){const sw=cw(n);if(!n.children.length)return sw;let tw=0;n.children.forEach((c,i)=>{if(i)tw+=HG;tw+=ms(c)});return Math.max(sw,tw)}
+    function ly(n,x,y){const tw=ms(n),sw=cw(n),cx=x+tw/2;
+      if(n.spouse){const lx=cx-sw/2;pos[n.primary.id]={x:lx,y};pos[n.spouse.id]={x:lx+NW+CG,y};sL.push({x1:lx+NW,y1:y+NH/2,x2:lx+NW+CG,y2:y+NH/2})}
+      else pos[n.primary.id]={x:cx-NW/2,y};
+      if(!n.children.length)return;
+      let ctw=0;n.children.forEach((c,i)=>{if(i)ctw+=HG;ctw+=ms(c)});
+      const cy=y+NH+VG,jy=y+NH+VG*.4;let kx=x+(tw-ctw)/2;
+      lines.push({x1:cx,y1:y+NH,x2:cx,y2:jy});
+      const cen=[];let tx=kx;n.children.forEach(c=>{const w=ms(c);cen.push(tx+w/2);tx+=w+HG});
+      if(cen.length)lines.push({x1:Math.min(cen[0],cx),y1:jy,x2:Math.max(cen[cen.length-1],cx),y2:jy});
+      n.children.forEach((c,i)=>{const w=ms(c);lines.push({x1:cen[i],y1:jy,x2:cen[i],y2:cy});ly(c,kx,cy);kx+=w+HG})}
+    let sx=30;trees.forEach(tn=>{const w=ms(tn);ly(tn,sx,30);sx+=w+HG*4});
+    return{pos,lines,sL}},[trees]);
+
+  const fitV=useCallback(()=>{const el=cr.current;if(!el)return;const e=Object.values(L.pos);if(!e.length)return;const P=40;const x0=Math.min(...e.map(p=>p.x))-P,x1=Math.max(...e.map(p=>p.x+NW))+P,y0=Math.min(...e.map(p=>p.y))-P,y1=Math.max(...e.map(p=>p.y+NH))+P;const tw=x1-x0,th=y1-y0,ew=el.clientWidth,eh=el.clientHeight,z=Math.min(ew/tw,eh/th,1.2);setZoom(z);setPan({x:(ew-tw*z)/2-x0*z,y:(eh-th*z)/2-y0*z})},[L]);
+
+  const onMD=e=>{if(e.target.closest(".vn"))return;setDrag(true);setDs({x:e.clientX-pan.x,y:e.clientY-pan.y})};
+  const onMM=e=>{if(drag)setPan({x:e.clientX-ds.x,y:e.clientY-ds.y})};
+  const onMU=()=>setDrag(false);
+  const onWh=e=>{e.preventDefault();setZoom(z=>Math.max(.05,Math.min(3,z-e.deltaY*.001)))};
+  const onTS=e=>{if(e.target.closest(".vn"))return;if(e.touches.length===2){const dx=e.touches[0].clientX-e.touches[1].clientX,dy=e.touches[0].clientY-e.touches[1].clientY;pr.current={d:Math.hypot(dx,dy),z:zoom}}else if(e.touches.length===1)tr.current={x:e.touches[0].clientX-pan.x,y:e.touches[0].clientY-pan.y}};
+  const onTM=e=>{if(e.touches.length===2&&pr.current){const dx=e.touches[0].clientX-e.touches[1].clientX,dy=e.touches[0].clientY-e.touches[1].clientY;setZoom(Math.max(.05,Math.min(3,pr.current.z*(Math.hypot(dx,dy)/pr.current.d))))}else if(e.touches.length===1&&tr.current)setPan({x:e.touches[0].clientX-tr.current.x,y:e.touches[0].clientY-tr.current.y})};
+  const onTE=()=>{tr.current=null;pr.current=null};
+
+  const isMe=id=>id===meId;
+
+  return <div className={lang==="gu"?"gu":""} style={{minHeight:"100vh",background:C.bg}}>
+    <header style={{background:C.w,borderBottom:`2px solid ${C.brd}`,padding:"10px 12px",display:"flex",alignItems:"center",gap:8,position:"sticky",top:0,zIndex:100,boxShadow:`0 2px 8px ${C.shd}`,flexWrap:"wrap"}}>
+      {view!=="home"&&<button onClick={()=>{setView("home");setSearch("")}} style={{background:C.warm,border:`1.5px solid ${C.brd}`,borderRadius:10,padding:"8px 12px",fontSize:14,fontWeight:600,color:C.acc}}>{t.back}</button>}
+      <div style={{flex:1,minWidth:90}}>
+        <h1 style={{fontFamily:"'Merriweather',Georgia,serif",fontSize:18,fontWeight:700,margin:0,color:C.acc}}>🌳 {t.title}</h1>
+        <p style={{margin:0,fontSize:11,color:C.txtL}}>{DATA.length} {t.members}</p>
+      </div>
+      <button onClick={()=>{setMePicker(true);setMeSearch("")}} style={{padding:"6px 10px",borderRadius:8,border:`2px solid ${C.meB}`,background:C.meH,color:C.meB,fontSize:11,fontWeight:700,maxWidth:100,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>👤 {pm[meId]?.name?.split(" ")[0]||t.iAm}</button>
+      <button onClick={()=>setLang(l=>l==="en"?"gu":"en")} style={{padding:"6px 10px",borderRadius:8,border:`2px solid ${C.acc}`,background:C.accBg,color:C.acc,fontSize:12,fontWeight:700}}>{t.lang}</button>
+    </header>
+
+    {mePicker&&<div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.5)",zIndex:200,display:"flex",alignItems:"center",justifyContent:"center",padding:16}} onClick={()=>meId&&setMePicker(false)}>
+      <div onClick={e=>e.stopPropagation()} style={{background:C.w,borderRadius:16,padding:18,width:"100%",maxWidth:400,maxHeight:"85vh",display:"flex",flexDirection:"column"}}>
+        <h2 style={{fontFamily:"'Merriweather',serif",fontSize:19,fontWeight:700,color:C.acc,margin:"0 0 4px"}}>{t.who}</h2>
+        <p style={{fontSize:13,color:C.txtM,margin:"0 0 10px"}}>{t.whoHint}</p>
+        <input value={meSearch} onChange={e=>setMeSearch(e.target.value)} placeholder={t.search} style={{width:"100%",padding:"11px 14px",fontSize:15,borderRadius:12,border:`2px solid ${C.brd}`,outline:"none",marginBottom:10,boxSizing:"border-box"}}/>
+        <div style={{flex:1,overflowY:"auto"}}>
+          {meCands.map(p=><button key={p.id} onClick={()=>{setMeId(p.id);setMePicker(false)}} style={{display:"flex",alignItems:"center",gap:10,width:"100%",padding:"9px 11px",borderRadius:10,border:`2px solid ${isMe(p.id)?C.meB:C.brd}`,background:isMe(p.id)?C.meH:C.w,cursor:"pointer",textAlign:"left",marginBottom:5}}><Av n={p.name} g={p.gender} s={38}/><div style={{flex:1}}><div style={{fontSize:15,fontWeight:600}}>{p.name}</div></div>{isMe(p.id)&&<span style={{color:C.meB,fontWeight:700}}>👤</span>}</button>)}
+        </div>
+      </div>
+    </div>}
+
+    {view==="vt"&&<div style={{position:"fixed",top:56,left:0,right:0,bottom:0,background:C.bg,overflow:"hidden"}}>
+      <div style={{position:"absolute",bottom:16,left:"50%",transform:"translateX(-50%)",zIndex:50,display:"flex",gap:6,background:C.w,borderRadius:12,padding:6,boxShadow:`0 3px 14px ${C.shdD}`,border:`1px solid ${C.brd}`}}>
+        <button onClick={()=>setZoom(z=>Math.min(3,z+.12))} style={zb}>+</button>
+        <button onClick={()=>setZoom(z=>Math.max(.05,z-.12))} style={zb}>−</button>
+        <button onClick={fitV} style={{...zb,width:"auto",padding:"0 14px",fontSize:13}}>{t.fit}</button>
+      </div>
+      <p style={{position:"absolute",bottom:56,left:"50%",transform:"translateX(-50%)",fontSize:11,color:C.txtL,whiteSpace:"nowrap",zIndex:50}}>{t.zoom}</p>
+      <div ref={cr} onMouseDown={onMD} onMouseMove={onMM} onMouseUp={onMU} onMouseLeave={onMU} onWheel={onWh} onTouchStart={onTS} onTouchMove={onTM} onTouchEnd={onTE} style={{width:"100%",height:"100%",cursor:drag?"grabbing":"grab",touchAction:"none"}}>
+        <svg style={{position:"absolute",inset:0,width:"100%",height:"100%",pointerEvents:"none"}}><g transform={`translate(${pan.x},${pan.y}) scale(${zoom})`}>
+          {L.lines.map((l,i)=><line key={i} x1={l.x1} y1={l.y1} x2={l.x2} y2={l.y2} stroke={C.line} strokeWidth={2} strokeLinecap="round"/>)}
+          {L.sL.map((l,i)=><line key={`s${i}`} x1={l.x1} y1={l.y1} x2={l.x2} y2={l.y2} stroke={C.spL} strokeWidth={2.5} strokeDasharray="5,4"/>)}
+        </g></svg>
+        <div style={{transform:`translate(${pan.x}px,${pan.y}px) scale(${zoom})`,transformOrigin:"0 0",position:"absolute",top:0,left:0}}>
+          {Object.entries(L.pos).map(([id,p])=>{const person=pm[id];if(!person)return null;const me=isMe(id);const r=rel(id);return(
+            <div key={id} className="vn" onClick={e=>{e.stopPropagation();openP(id)}} style={{position:"absolute",left:p.x,top:p.y,width:NW,height:NH,background:me?C.meH:C.nodeBg,border:`2px solid ${me?C.meB:C.brd}`,borderTop:`3px solid ${gc(person.gender)}`,borderRadius:10,cursor:"pointer",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:3,boxShadow:me?`0 0 12px ${C.meB}44`:`0 2px 6px ${C.shd}`}}>
+              <Av n={person.name} g={person.gender} s={28} mini/>
+              <div style={{fontSize:9,fontWeight:600,marginTop:2,textAlign:"center",lineHeight:1.1,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",width:"100%",padding:"0 2px",boxSizing:"border-box"}}>{person.name.split(" ")[0]}</div>
+              {r&&<div style={{fontSize:7.5,color:me?C.meB:C.txtL,marginTop:1,textAlign:"center",fontWeight:me?700:400,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",width:"100%",padding:"0 2px",boxSizing:"border-box"}}>{r}</div>}
+            </div>)})}
+        </div>
+      </div>
+    </div>}
+
+    <div style={{maxWidth:700,margin:"0 auto",padding:"0 14px 60px",display:view==="vt"?"none":"block"}}>
+      {view==="home"&&<>
+        {meId&&pm[meId]&&<div onClick={()=>{setMePicker(true);setMeSearch("")}} style={{background:C.meH,border:`2px solid ${C.meB}`,borderRadius:12,padding:"10px 14px",margin:"12px 0 10px",display:"flex",alignItems:"center",gap:10,cursor:"pointer"}}>
+          <Av n={pm[meId].name} g={pm[meId].gender} s={34}/>
+          <div style={{flex:1}}><div style={{fontSize:13,color:C.meB,fontWeight:600}}>{t.viewAs}: <strong>{pm[meId].name}</strong></div><div style={{fontSize:11,color:C.txtM}}>{t.change}</div></div>
+          <span>✏️</span>
+        </div>}
+        <input value={search} onChange={e=>setSearch(e.target.value)} placeholder={t.search} style={{width:"100%",padding:"12px 16px",fontSize:15,borderRadius:14,border:`2px solid ${C.brd}`,background:C.w,outline:"none",boxSizing:"border-box",marginBottom:10}}/>
+        <div style={{display:"flex",gap:6,marginBottom:12}}>
+          <button onClick={()=>setMode("grid")} style={{...tb,background:mode==="grid"?C.accBg:C.w,borderColor:mode==="grid"?C.acc:C.brd,color:mode==="grid"?C.acc:C.txtM}}>{t.everyone}</button>
+          <button onClick={()=>setMode("list")} style={{...tb,background:mode==="list"?C.accBg:C.w,borderColor:mode==="list"?C.acc:C.brd,color:mode==="list"?C.acc:C.txtM}}>{t.list}</button>
+          <button onClick={()=>{setView("vt");setTimeout(fitV,200)}} style={{...tb,background:C.w,borderColor:C.brd,color:C.txtM}}>{t.tree}</button>
+        </div>
+        {mode==="grid"&&sorted.map(p=><PRow key={p.id} p={p} onClick={()=>openP(p.id)} r={rel(p.id)} me={isMe(p.id)}/>)}
+        {mode==="list"&&trees.map((n,i)=><TN key={i} node={n} openP={openP} d={0} rel={rel} meId={meId}/>)}
+        {filtered.length===0&&<div style={{textAlign:"center",padding:40,color:C.txtL}}>{t.noRes} "{search}"</div>}
+      </>}
+
+      {view==="person"&&sel&&<div style={{padding:"18px 0"}}>
+        <div style={{textAlign:"center",marginBottom:18}}>
+          <Av n={sel.name} g={sel.gender} s={110}/>
+          <h2 style={{fontFamily:"'Merriweather',serif",fontSize:22,fontWeight:700,margin:"12px 0 4px"}}>{sel.name}{isMe(sel.id)?" 👤":""}</h2>
+          {rel(sel.id)&&<p style={{fontSize:16,color:C.meB,margin:0,fontWeight:600}}>{rel(sel.id)}</p>}
+        </div>
+        <div style={{background:C.w,borderRadius:14,border:`1.5px solid ${C.brd}`,overflow:"hidden"}}>
+          <div style={{padding:"10px 16px",background:C.warm,fontWeight:600,fontSize:15,color:C.acc}}>{t.conn}</div>
+          {sel.parentId&&pm[sel.parentId]&&<RRow p={pm[sel.parentId]} onClick={()=>openP(sel.parentId)} r={rel(sel.parentId)}/>}
+          {sel.spouseId&&pm[sel.spouseId]&&<RRow p={pm[sel.spouseId]} onClick={()=>openP(sel.spouseId)} r={rel(sel.spouseId)}/>}
+          {ck(sel.id).map(c=><RRow key={c.id} p={c} onClick={()=>openP(c.id)} r={rel(c.id)}/>)}
+          {sel.parentId&&DATA.filter(p=>p.parentId===sel.parentId&&p.id!==sel.id).map(s=><RRow key={s.id} p={s} onClick={()=>openP(s.id)} r={rel(s.id)}/>)}
+        </div>
+      </div>}
+    </div>
+    <div style={{textAlign:"center",padding:"16px 0 30px",fontSize:11,color:C.txtL,display:view==="vt"?"none":"block"}}>Made with ❤️ for the Desai family</div>
+  </div>;
+}
+
+const tb={flex:1,padding:"10px 4px",borderRadius:10,border:"2px solid",fontSize:12,fontWeight:600,cursor:"pointer",background:"#fff"};
+const zb={width:34,height:34,borderRadius:8,border:`1.5px solid ${C.brd}`,background:C.w,color:C.txt,cursor:"pointer",fontSize:17,display:"flex",alignItems:"center",justifyContent:"center",fontWeight:700};
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+</body>
+</html>
